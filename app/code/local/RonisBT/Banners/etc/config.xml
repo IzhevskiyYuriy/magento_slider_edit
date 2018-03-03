@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+
+<config>
+    <modules>
+        <RonisBT_Banners>
+            <version>2.0.7</version>
+        </RonisBT_Banners>
+    </modules>
+    <global>
+        <blocks>
+            <banners>
+                <class>RonisBT_Banners_Block</class>
+            </banners>
+        </blocks>
+
+        <models>
+            <banners>
+                <class>RonisBT_Banners_Model</class>
+                <resourceModel>banners_resource</resourceModel>
+            </banners>
+            <banners_resource>
+                <class>RonisBT_Banners_Model_Resource</class>
+                <entities>
+                    <bannereditor>
+                        <table>ronis_banners</table>
+                    </bannereditor>
+                </entities>
+            </banners_resource>
+        </models>
+
+        <resources>
+            <banners_setup>
+                <setup>
+                    <module>RonisBT_Banners</module>
+                </setup>
+            </banners_setup>
+        </resources>
+        <helpers>
+            <banners>
+                <class>RonisBT_Banners_Helper</class>
+            </banners>
+        </helpers>
+    </global>
+
+
+    <frontend>
+        <routers>
+            <banners>
+                <use>standard</use>
+                <args>
+                    <module>RonisBT_Banners</module>
+                    <frontName>banners</frontName>
+                </args>
+            </banners>
+        </routers>
+
+    </frontend>
+
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <banners before="Mage_Adminhtml">RonisBT_Banners_Adminhtml</banners>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+
+
+
+    <default>
+        <banners>
+            <settings>
+                <enabled>1</enabled>
+            </settings>
+        </banners>
+
+    </default>
+
+
+
+
+</config>

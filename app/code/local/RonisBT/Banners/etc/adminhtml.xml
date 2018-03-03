@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+
+<config>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <banners translate="title" module="banners">
+                                        <title>Banners</title>
+                                    </banners>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                    <cms>
+                        <children>
+                            <banners translate="title" module="banners">
+                                <title>Homepage banners</title>
+                            </banners>
+
+                        </children>
+                    </cms>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+
+    <menu>
+        <cms>
+            <children>
+                <banners translate="title" module="banners">
+                    <title>Homepage banners</title>
+                    <action>adminhtml/ronisbanners</action>
+                    <sort_order>20</sort_order>
+                </banners>
+
+            </children>
+        </cms>
+    </menu>
+
+</config>
