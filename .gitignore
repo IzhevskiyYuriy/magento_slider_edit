@@ -1,0 +1,14 @@
+*~
+Thumbs.db
+.svn
+.DS_Store
+/sitemaps/
+/media
+/var
+/app/etc/local.xml
+!*
+/data/*
+/includes/src
+/downloader/
+/nbproject/
+
