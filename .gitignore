@@ -11,4 +11,7 @@ Thumbs.db
 /includes/src
 /downloader/
 /nbproject/
+var/log/
+var/report/
+media/
 
