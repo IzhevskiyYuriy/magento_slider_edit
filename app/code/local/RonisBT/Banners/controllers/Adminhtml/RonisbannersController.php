@@ -159,5 +159,25 @@ class RonisBT_Banners_Adminhtml_RonisbannersController extends Mage_Adminhtml_Co
     //    $this->_redirect("*/*/");
 
     }
+    
+    public function massStatusAction()
+    {
+        $statuses = $this->getRequest()->getParams();
+        try{
+            $banners = Mage::getModel('banners/bannereditor')
+                ->getCollection()
+                ->addFieldToFilter('banner_id', array('in' => $statuses['massaction']));
+        foreach ($banners as $banner) {
+            $banner->setBlockStatus($statuses['banner_status'])->save();
+        }
+        } catch(Exception $e) {
+            Mage::logException($e);
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+            return $this->_redirect('*/*/');
+        }
+        Mage::getSingleton('adminhtml/session')->addSuccess('Banners were updated');
+        
+        return $this->_redirect('*/*/');
+    }
 
 }

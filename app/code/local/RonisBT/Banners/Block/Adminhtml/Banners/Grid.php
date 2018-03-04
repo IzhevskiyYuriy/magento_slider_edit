@@ -63,5 +63,39 @@ class  RonisBT_Banners_Block_Adminhtml_Banners_Grid extends Mage_Adminhtml_Block
     {
         return $this->getUrl('*/*/edit', array('banner_id' => $row->getId()));
     }
+    
+    protected function _prepareMassaction() {
+       // parent::_prepareMassaction();
+        
+        $this->setMassactionIdField('banner_id');
+        $this->getMassactionBlock()->setIdFieldName('banner_id');
+        $this->getMassactionBlock()
+                ->addItem('delete',
+                    array(
+                        'label' => Mage::helper('banners')->__('Delete'),
+                        'url' => $this->getUrl('*/*/massDelete'),
+                        'confirm' => Mage::helper('banners')->__('Are you sure?')
+                    )
+                )
+                ->addItem('status',
+                    array(
+                        'label' => Mage::helper('banners')->__('Update status'),
+                        'url' => $this->getUrl('*/*/massStatus'),
+                        'additional' => array(
+                            'banners_status' => array(
+                                    'name' => 'banner_status',
+                                    'type' => 'select',
+                                    'class' => 'required-entry',
+                                    'label' => Mage::helper('banners')->__('Status'),
+                                    'values' => Mage::getModel('banners/source_status')->toOptionArray()
+                                )
+                            )
+                        
+                        )
+                );
+        return $this;
+    }
+    
+    
 
 }
