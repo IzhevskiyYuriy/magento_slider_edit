@@ -295,6 +295,7 @@ class Mage_Core_Controller_Varien_Router_Standard extends Mage_Core_Controller_V
     protected function _validateControllerClassName($realModule, $controller)
     {
         $controllerFileName = $this->getControllerFileName($realModule, $controller);
+       // var_dump($controllerFileName); die(); 
         if (!$this->validateControllerFileName($controllerFileName)) {
             return false;
         }
