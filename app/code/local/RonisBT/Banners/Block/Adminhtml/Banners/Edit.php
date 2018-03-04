@@ -31,12 +31,11 @@ class RonisBT_Banners_Block_Adminhtml_Banners_Edit extends Mage_Adminhtml_Block_
 
     /**
      * Get edit form container header text
-     *
+     * example Edit Banner 'Банер 2 '
      * @return string
      */
     public function getHeaderText()
     {
-        
         if (Mage::registry('banners_block')->getId()) {
             return Mage::helper('banners')->__("Edit Banner '%s'", $this->escapeHtml(Mage::registry('banners_block')->getTitle()));
         }

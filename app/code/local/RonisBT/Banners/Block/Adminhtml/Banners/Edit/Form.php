@@ -63,7 +63,7 @@ class RonisBT_Banners_Block_Adminhtml_Banners_Edit_Form extends Mage_Adminhtml_B
             'required'  => true,
         ));
         
-        $fieldset->addField('image', 'text', array(
+        $fieldset->addField('image', 'file', array(
             'name'      => 'image',
             'label'     => Mage::helper('banners')->__('Image'),
             'title'     => Mage::helper('banners')->__('Banner image'),
