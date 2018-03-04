@@ -3,16 +3,7 @@
 class  RonisBT_Banners_Block_Adminhtml_Banners_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
 
-   /* public function __construct()
-    {
-        parent::__construct();
-        $this->setId('banner');
-        $this->setDefaultSort('banner_id');
-        $this->setDefaultDir('DESC');
-        $this->setSaveParametersInSession(true);
-    }*/
-
-    protected function _prepareCollection()
+     protected function _prepareCollection()
     {
         $collection = Mage::getModel('banners/bannereditor')->getCollection();
 
@@ -55,7 +46,10 @@ class  RonisBT_Banners_Block_Adminhtml_Banners_Grid extends Mage_Adminhtml_Block
         $this->addColumn("block_status", array(
             "header" => Mage::helper("banners")->__("Status"),
             "index" => "block_status",
+            "type"      => "options",
+            "options"   => Mage::getModel('banners/source_status')->toArray(),
         ));
+        
 
         return parent::_prepareColumns();
     }
