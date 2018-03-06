@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<layout version="1.0.0">
+    <banners_index_index>
+        <reference name="content">
+            <!--<action method="addIJs"><script>js/jquery.flexslider-min.js</script></action>-->
+            <block type="banners/index" name="banners.index" template="banners/index.phtml"></block>
+        </reference>
+    </banners_index_index>
+</layout>
