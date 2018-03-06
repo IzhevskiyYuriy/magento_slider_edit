@@ -45,14 +45,23 @@
 
     <frontend>
         <routers>
-            <banners> <!--имя модуля-->
+            <banners>
                 <use>standard</use>
                 <args>
-                    <module>RonisBT_Banners</module> <!--Namespase_NameModule-->
-                    <frontName>banners</frontName> <!--http://example.com/frontName/actionControllerName/actionMethod/-->
+                    <module>RonisBT_Banners</module>
+                    <frontName>banners</frontName>
                 </args>
             </banners>
         </routers>
+
+        <layout>
+            <updates>
+                <banners module="banners">
+                    <file>banners.xml</file>
+                </banners>
+            </updates>
+        </layout>
+
     </frontend>
 
     <admin>
@@ -66,19 +75,6 @@
             </adminhtml>
         </routers>
     </admin>
-
-
-
-    <default>
-        <banners>
-            <settings>
-                <enabled>1</enabled>
-            </settings>
-        </banners>
-
-    </default>
-
-
 
 
 </config>
