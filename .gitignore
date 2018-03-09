@@ -14,4 +14,5 @@ Thumbs.db
 var/log/
 var/report/
 media/
+.idea/
 
