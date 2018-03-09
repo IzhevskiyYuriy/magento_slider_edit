@@ -1,0 +1,15 @@
+<layout version="0.1.0">
+    <default>
+        <reference name="head">
+            <!--Adding JS Files Styles-->
+            <action method="addItem"><type>skin_js</type><name>js/jquery.flexslider-min.js</name></action>
+            <action method="addItem"><type>skin_js</type><name>js/slider.js</name></action>
+
+            <!--Adding Css Files Styles-->
+            <action method="addCss"><stylesheet>css/flexslider.css</stylesheet><params/></action>
+        </reference>
+
+
+
+    </default>
+</layout>
