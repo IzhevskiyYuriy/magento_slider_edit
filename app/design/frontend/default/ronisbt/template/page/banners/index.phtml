@@ -5,7 +5,7 @@
                 <li>
                     <a href="<?php echo $banner->getUrl() ?>">
                         <img
-                                src="<?php echo Mage::getBaseUrl('media').$banner->getImage()?>"
+                                src="<?php echo $this->getBaseUr().$banner->getImage()?>"
                                 alt="<?php echo $this->htmlEscape($banner->getTitle()); ?>"
                                 title="<?php echo $this->escapeHtml($banner->getTitle()); ?>">
                     </a>

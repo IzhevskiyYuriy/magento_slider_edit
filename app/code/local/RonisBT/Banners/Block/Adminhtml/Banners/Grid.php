@@ -24,18 +24,12 @@ class  RonisBT_Banners_Block_Adminhtml_Banners_Grid extends Mage_Adminhtml_Block
 
         $this->addColumn('title', array(
             'header'    => Mage::helper('banners')->__('Title'),
-//            'align'     => 'left',
             'index'     => 'title',
         ));
 
         $this->addColumn("url", array(
             "header" => Mage::helper("banners")->__("Link"),
             "index" => "url",
-        ));
-
-        $this->addColumn("image", array(
-            "header" => Mage::helper("banners")->__("Images"),
-            "index" => "image",
         ));
 
         $this->addColumn("position_sort", array(

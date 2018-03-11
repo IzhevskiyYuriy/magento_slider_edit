@@ -10,18 +10,7 @@ class RonisBT_Banners_Block_Adminhtml_Banners_Edit_Form extends Mage_Adminhtml_B
         $this->setId('block_form');
         $this->setTitle(Mage::helper('banners')->__('Block Information'));
     }
-    /**
-     * Load Wysiwyg on demand and Prepare layout
-     */
-    /*
-    protected function _prepareLayout()
-    {
-        parent::_prepareLayout();
-        if (Mage::getSingleton('cms/wysiwyg_config')->isEnabled()) {
-            $this->getLayout()->getBlock('head')->setCanLoadTinyMce(true);
-        }
-    }
-*/
+
     protected function _prepareForm()
     {
 
@@ -69,21 +58,6 @@ class RonisBT_Banners_Block_Adminhtml_Banners_Edit_Form extends Mage_Adminhtml_B
             'title'     => Mage::helper('banners')->__('Position sort'),
             'required'  => true,
         ));
-
-//        $fieldset->addField('width', 'text', array(
-//            'name'      => 'width',
-//            'label'     => Mage::helper('banners')->__('Width'),
-//            'title'     => Mage::helper('banners')->__('Width'),
-//            'required'  => true,
-//        ));
-//
-//        $fieldset->addField('height', 'text', array(
-//            'name'      => 'height',
-//            'label'     => Mage::helper('banners')->__('Height'),
-//            'title'     => Mage::helper('banners')->__('Height'),
-//            'required'  => true,
-//        ));
-
 
         $fieldset->addField('block_status', 'select', array(
             'label'     => Mage::helper('banners')->__('Status'),

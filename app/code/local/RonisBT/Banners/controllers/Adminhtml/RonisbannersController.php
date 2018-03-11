@@ -192,4 +192,25 @@ class RonisBT_Banners_Adminhtml_RonisbannersController extends Mage_Adminhtml_Co
         return $this->_redirect('*/*/');
     }
 
+    public function massDeleteAction()
+    {
+        $banners = $this->getRequest()->getParams();
+        try{
+            $banners = Mage::getModel('banners/bannereditor')
+                ->getCollection()
+                ->addFieldToFilter('banner_id', array('in' => $banners['massaction']));
+            foreach ($banners as $banner) {
+                $banner->delete();
+            }
+        } catch(Exception $e) {
+            Mage::logException($e);
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+            return $this->_redirect('*/*/');
+        }
+        Mage::getSingleton('adminhtml/session')->addSuccess('Banners were delete');
+
+        return $this->_redirect('*/*/');
+    }
+
+
 }
