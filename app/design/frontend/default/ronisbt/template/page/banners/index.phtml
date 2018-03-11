@@ -1,20 +1,18 @@
-<?// if (count($this->getBannersContent()) != 0) :?>
-<div class="flexslider">
-    <ul class="slides">
-        <?php
-        echo 'ddddddddddddd';
-        ?>
-        <?php foreach ($this->getBannersContent() as $banner):?>
+<? if (count($this->getBannersContent()) != 0) :?>
+    <div class="flexslider">
+        <ul class="slides">
+            <?php foreach ($this->getBannersContent() as $banner):?>
+                <li>
+                    <a href="<?php echo $banner->getUrl() ?>">
+                        <img
+                                src="<?php echo Mage::getBaseUrl('media').$banner->getImage()?>"
+                                alt="<?php echo $this->htmlEscape($banner->getTitle()); ?>"
+                                title="<?php echo $this->escapeHtml($banner->getTitle()); ?>">
+                    </a>
+                </li>
 
-            <li>
-                <a href="<?php echo $banner->getUrl() ?>">
-                    <img
-                        src="<?php echo $this->getImageSrc().($banner->getImage())?>"
-                        alt="<?php echo $this->htmlEscape($banner->getTitle()); ?>"
-                        title="<?php echo $this->escapeHtml($banner->getTitle()); ?>">
-                </a>
-            </li>
-        <?php endforeach;?>
-    </ul>
-</div>
-<?php //endif;?>
+            <?php endforeach;?>
+
+        </ul>
+    </div>
+<?php endif;?>

@@ -1,17 +1,17 @@
-<?xml version="1.0"?>
-
 <layout version="1.0.0">
     <banners_index_index>
         <reference name="content">
-            <block type="banners/index" name="banners.index" template="banners/index.phtml"></block>
+            <block type="banners/index" name="banners.index" template="page/banners/index.phtml"></block>
         </reference>
     </banners_index_index>
 
     <cms_index_defaultindex>
         <reference name="content">
-            <block type="banners/index" name="banners.index" template="banners/index.phtml"></block>
+
+            <block type="banners/index" name="banners.index" template="page/banners/index.phtml"></block>
+
+            <block type="catalog/product_widget_new" display_type="new_products" products_count="5" template="catalog/product/widget/new/content/new_grid.phtml"></block>
+            <block type="cms/default/home" name="cms.default.home" template="cms/default/home.phtml"></block>
         </reference>
     </cms_index_defaultindex>
-
-
-</layout>
+    </layout>

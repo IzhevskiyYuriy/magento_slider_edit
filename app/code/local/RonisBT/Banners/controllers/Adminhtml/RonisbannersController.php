@@ -2,6 +2,10 @@
 
 class RonisBT_Banners_Adminhtml_RonisbannersController extends Mage_Adminhtml_Controller_Action
 {
+
+    const IMAGE_WIDTH	= 1768;
+    const IMAGE_HEIGHT	= 887;
+
     public function indexAction()
     {
 
@@ -37,52 +41,26 @@ class RonisBT_Banners_Adminhtml_RonisbannersController extends Mage_Adminhtml_Co
     public function saveAction()
     {
         $postData = $this->getRequest()->getPost();
-        //$width =  (int) $this->getRequest()->getParam('width');
-        //$height =  (int) $this->getRequest()->getParam('height');
-
 
         if (!empty($postData)) {
             try {
                 try {
                     if (isset($_FILES)){
                         if (isset($_FILES['image']['name']) && (file_exists($_FILES['image']['tmp_name']))) {
-                            $path = Mage::getBaseDir('media') .DS. 'banners' .DS. 'banners' . DS;
-
-                            $uploader = new Varien_File_Uploader('image');
-                            $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png']);
-                            $uploader->setValidMimeTypes(['image/jpeg', 'image/gif', 'image/png']);
-                            $uploader->setAllowRenameFiles(false);
-                            $uploader->setFilesDispersion(false);
-                            $uploader->getUploadedFileName();
-
-                            $destFile = $path . $_FILES['image']['name'];
-                            $filename = $uploader->getNewFileName($destFile);
-
-
-
-                            $uploader
-                                ->save($path, $filename);
-
-                            $this->resizeImage($_FILES['image']['name'], '1050', '500', 'banners/banners');
-                            $postData['image'] = 'banners/banners/'.$filename ;
-
-
+                            $previewAndSave = $this->saveImages($_FILES['image']['name']);
+                            $this->resizeImage($_FILES['image']['name'], self::IMAGE_WIDTH, self::IMAGE_HEIGHT, 'banners/banners');
+                            $postData['image'] = 'banners/banners/'. $previewAndSave['fileName'] ;
                         }
-
                     }
                 } catch (Exception $e) {
                     Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
                     return $this->_redirect('*/*/edit', array('banner_id' => $this->getRequest()->getParam('banner_id')));
                 }
-                //save image
 
-               // print_r(array('width' => $postData['width']));exit;
                 $model = Mage::getModel("banners/bannereditor")
                     ->addData($postData)
-                   // ->setData(array('width' => $postData['width']))
                     ->setId($this->getRequest()->getParam("banner_id"))
                     ->save();
-
 
                 Mage::getSingleton("adminhtml/session")->addSuccess(Mage::helper("adminhtml")->__("Banners was successfully saved"));
 
@@ -101,36 +79,50 @@ class RonisBT_Banners_Adminhtml_RonisbannersController extends Mage_Adminhtml_Co
 
         $this->_redirect("*/*/");
     }
-//ALTER TABLE `ronis_banners` ADD `width` INT NOT NULL DEFAULT '1302' AFTER `image`, ADD `height` INT NOT NULL DEFAULT '568' AFTER `width`;
-    public function resizeImage($imageName, $width=NULL, $height=NULL, $imagePath=NULL)
+
+    public function resizeImage($imageName, $width = NULL, $height = NULL, $imagePath = NULL)
     {
         $imagePath = str_replace("/", DS, $imagePath);
         $imagePathFull = Mage::getBaseDir('media') . DS . $imagePath . DS . $imageName;
 
-//        if($width == NULL && $height == NULL) {
-//            $width = 100;
-//            $height = 100;
-//        }
-        $resizePath = $width . 'x' . $height;
-        //$resizePathFull = Mage::getBaseDir('media') . DS . $imagePath . DS . $resizePath . DS . $imageName;
-
-
         if (file_exists($imagePathFull)) {
-              //print_r($imagePathFull);exit();
+
             $imageObj = new Varien_Image($imagePathFull);
+
             $imageObj->getMimeType(['image/jpeg', 'image/gif', 'image/png']);
-            $imageObj->keepTransparency(true);
-            $imageObj->keepFrame(true);
-            $imageObj->keepAspectRatio(true);
+            $imageObj->constrainOnly(false);
+            $imageObj->keepAspectRatio(false);
+            $imageObj->keepFrame(false);
             $imageObj->backgroundColor(array(255, 255, 255));
-            $imageObj->resize($width,$height);
+            $imageObj->resize($width, $height);
 
             $imageObj->save($imagePathFull);
+            return $imageObj;
         }
-
-        $imagePath=str_replace(DS, "/", $imagePath);
-        return Mage::getBaseUrl("media") . $imagePath . "/" . $resizePath . "/" . $imageName;
     }
+
+    public function saveImages($fileImage)
+    {
+        $path = Mage::getBaseDir('media') .DS. 'banners' .DS. 'banners' . DS;
+
+        $uploader = new Varien_File_Uploader('image');
+        $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png']);
+        $uploader->setValidMimeTypes(['image/jpeg', 'image/gif', 'image/png']);
+        $uploader->setAllowRenameFiles(false);
+        $uploader->setFilesDispersion(false);
+
+        $destFile = $path . $fileImage;
+        $filename = $uploader->getNewFileName($destFile);
+
+        $uploader
+            ->save($path, $filename);
+        return [
+            'fileName' => $filename,
+        ];
+
+
+    }
+
 
 //    public function saveAction()
 //    {
