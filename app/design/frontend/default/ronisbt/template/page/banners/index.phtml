@@ -1,5 +1,9 @@
+<?// if (count($this->getBannersContent()) != 0) :?>
 <div class="flexslider">
     <ul class="slides">
+        <?php
+        echo 'ddddddddddddd';
+        ?>
         <?php foreach ($this->getBannersContent() as $banner):?>
 
             <li>
@@ -13,3 +17,4 @@
         <?php endforeach;?>
     </ul>
 </div>
+<?php //endif;?>
