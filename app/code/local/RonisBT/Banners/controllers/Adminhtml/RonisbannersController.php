@@ -6,6 +6,7 @@ class RonisBT_Banners_Adminhtml_RonisbannersController extends Mage_Adminhtml_Co
     const IMAGE_WIDTH	= 1768;
     const IMAGE_HEIGHT	= 887;
 
+
     public function indexAction()
     {
 
@@ -152,15 +153,13 @@ class RonisBT_Banners_Adminhtml_RonisbannersController extends Mage_Adminhtml_Co
 //        $this->_redirect("*/*/");
 //    }  }
 
-    
+
     public function deleteAction()
     {
         if($this->getRequest()->getParam("banner_id") > 0 ) {
             try {
-                $model = Mage::getModel("banners/bannereditor")
-                    ->setId($this->getRequest()->getParam("banner_id"))
-                    ->delete();
-                
+                $this->deleteFileImages();
+
                 Mage::getSingleton("adminhtml/session")->addSuccess(Mage::helper("adminhtml")->__("Banners was successfully deleted"));
                 $this->_redirect("*/*/");
             } 
@@ -171,36 +170,19 @@ class RonisBT_Banners_Adminhtml_RonisbannersController extends Mage_Adminhtml_Co
         }
         $this->_redirect("*/*/");
     }
-    
-    public function massStatusAction()
-    {
-        $statuses = $this->getRequest()->getParams();
-        try{
-            $banners = Mage::getModel('banners/bannereditor')
-                ->getCollection()
-                ->addFieldToFilter('banner_id', array('in' => $statuses['massaction']));
-        foreach ($banners as $banner) {
-            $banner->setBlockStatus($statuses['banner_status'])->save();
-        }
-        } catch(Exception $e) {
-            Mage::logException($e);
-            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-            return $this->_redirect('*/*/');
-        }
-        Mage::getSingleton('adminhtml/session')->addSuccess('Banners were updated');
-        
-        return $this->_redirect('*/*/');
-    }
 
     public function massDeleteAction()
     {
         $banners = $this->getRequest()->getParams();
+        $path = Mage::getBaseDir('media') . DS;
         try{
             $banners = Mage::getModel('banners/bannereditor')
                 ->getCollection()
                 ->addFieldToFilter('banner_id', array('in' => $banners['massaction']));
+
             foreach ($banners as $banner) {
-                $banner->delete();
+                $image = $banner->image;
+                $this->checkingFileDeleted($path, $image, $banner);
             }
         } catch(Exception $e) {
             Mage::logException($e);
@@ -211,6 +193,60 @@ class RonisBT_Banners_Adminhtml_RonisbannersController extends Mage_Adminhtml_Co
 
         return $this->_redirect('*/*/');
     }
+
+
+    /**
+     * @throws Mage_Core_Exception
+     */
+    public function delete()
+    {
+        $path = Mage::getBaseDir('media') . DS;
+        $bannerId = (int) $this->getRequest()->getParam('banner_id');
+        $model = Mage::getModel('banners/bannereditor')->load($bannerId);
+        $image = $model->getImage();
+        $this->checkingFileDeleted($path, $image, $model);
+    }
+
+    /**
+     * @param $path
+     * @param $image
+     * @param $model
+     * @throws Mage_Core_Exception
+     */
+    public function checkingFileDeleted($path, $image, $delete)
+    {
+        if (file_exists($path . $image)) {
+            unlink($path . $image);
+            $delete->delete();
+        } else {
+            $delete->delete();
+            Mage::getSingleton('adminhtml/session')->addSuccess('Data on banners has been removed');
+            Mage::throwException(Mage::helper('banners')->__('Could not delete file or it is missing'));
+        }
+    }
+
+
+    public function massStatusAction()
+    {
+        $statuses = $this->getRequest()->getParams();
+        try{
+            $banners = Mage::getModel('banners/bannereditor')
+                ->getCollection()
+                ->addFieldToFilter('banner_id', array('in' => $statuses['massaction']));
+            foreach ($banners as $banner) {
+                $banner->setBlockStatus($statuses['banner_status'])->save();
+            }
+        } catch(Exception $e) {
+            Mage::logException($e);
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+            return $this->_redirect('*/*/');
+        }
+        Mage::getSingleton('adminhtml/session')->addSuccess('Banners were updated');
+
+        return $this->_redirect('*/*/');
+    }
+
+
 
 
 }
