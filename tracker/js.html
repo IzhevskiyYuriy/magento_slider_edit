@@ -1,33 +1,13 @@
 <!--<body onload="createQyert('post', 'test.php', Browser);">-->
 <div id="info"></div>
-<p style="color:red">sadsa</p>
+<a href="#" class="level0 has-children">Men</a>
+<a href="#" class="level0 has-children">Men</a>
 
-<button  style="color:blue">78</button>
 
 <a href="http://dockerized-magento.local/tracker/js.html" class="level0 has-children">Men</a>
 <script>
-
-
-
-
-    //   window.onload = function () { // wait until the page is loaded
-    //     var links = document.getElementsByTagName('a');
-    //
-    //     for ( var i = 0; i < links.length; i ++ ) {
-    //         links.item(i).onclick = function () {
-    //             // store the href of link on click here
-    //             return this.href ; // or alert( this.getAttribute('href'); // more proper
-    //         };
-    //
-    //     }
-    // };
-    window.onload = function() {
-        createQyert('post', 'index.php', Browser);
-    };
-
-
-
-
+    const  path ="index.php";
+    const method = "post";
 
     var parse = function(ua, platform){
         ua = ua.toLowerCase();
@@ -72,6 +52,7 @@
         return (S4()+S4()+S4()+S4()+S4()+S4()+S4()+S4());
     }
 
+
     function getCookie(name) {
         var cookie = " " + document.cookie;
         var search = " " + name + "=";
@@ -101,9 +82,6 @@
 
     }
 
-    var Browser = {} ;
-    Browser.userAgent = parse(navigator.userAgent);
-    Browser.Cookie = checkCookie();
 
 
 
@@ -125,7 +103,7 @@
     }
 
 
-    function createQyert(path, method, Browser){
+    function createAjax(path, method, Browser){
         // var XHR = ("onload" in new XMLHttpRequest()) ? XMLHttpRequest : XDomainRequest;
         // var xhr = new XHR();
         var xhr = getXmlHttp();
@@ -146,10 +124,58 @@
         }
         xhr.send('param=' + JSON.stringify(Browser));
     }
+    checkCookie();
+    var Browser = {};
+    Browser.hrefS = "";
+    Browser.userAgent = parse(navigator.userAgent);
+    Browser.Cookie = getCookie('track');
+
+
+    window.onload = function () { // wait until the page is loaded
+
+
+        document.body.addEventListener("click",function(e){
+            const targetEl = e.target;
+            if( targetEl.tagName === "A") {
+                Browser.hrefS =  targetEl.href ;
+
+                if (Browser.hrefS && getCookie('track') !== null) {
+                    createAjax(method, path,  Browser)
+                }
+            }
+
+        })
+    };
+
+   console.log(getCookie('track'));
+
+
+
+
+
     // createQyert('post', 'test.php', Browser);
     // setTimeout(()=>{alert('tic')},7000)
     // document.body.addEventListener('click',(e)=>{
     //     alert( e.target.tagName)
     // })
+    //
+    // var Browser ={}
+    // Browser.hrefS ="";
+    // var  path="path1";
+    // const method = "post"
+    // window.onload = function () { // wait until the page is loaded
+    //
+    //
+    //     document.body.addEventListener("click",function(e){
+    //         const targetEl = e.target;
+    //         if( targetEl.tagName==="A") {
+    //             Browser.hrefS =  targetEl.href ;
+    //             // createQyert(path, method, Browser)
+    //         }
+    //
+    //     })
+    // };
+
+
 
 </script>
