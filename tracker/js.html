@@ -1,76 +1,137 @@
+<!--<body onload="createQyert('post', 'test.php', Browser);">-->
 <div id="info"></div>
+<p style="color:red">sadsa</p>
+
+<button  style="color:blue">78</button>
+
+<a href="http://dockerized-magento.local/tracker/js.html" class="level0 has-children">Men</a>
 <script>
+
+
+
+
+    //   window.onload = function () { // wait until the page is loaded
+    //     var links = document.getElementsByTagName('a');
+    //
+    //     for ( var i = 0; i < links.length; i ++ ) {
+    //         links.item(i).onclick = function () {
+    //             // store the href of link on click here
+    //             return this.href ; // or alert( this.getAttribute('href'); // more proper
+    //         };
+    //
+    //     }
+    // };
+    window.onload = function() {
+        createQyert('post', 'index.php', Browser);
+    };
+
+
+
+
+
     var parse = function(ua, platform){
         ua = ua.toLowerCase();
         platform = (platform ? platform.toLowerCase() : '');
-
         // chrome is included in the edge UA, so need to check for edge first,
         // before checking if it's chrome.
         var UA = ua.match(/(edge)[\s\/:]([\w\d\.]+)/);
         if (!UA){
             UA = ua.match(/(opera|ie|firefox|chrome|trident|crios|version)[\s\/:]([\w\d\.]+)?.*?(safari|(?:rv[\s\/:]|version[\s\/:])([\w\d\.]+)|$)/) || [null, 'unknown', 0];
         }
-
         if (UA[1] == 'trident'){
             UA[1] = 'ie';
             if (UA[4]) UA[2] = UA[4];
         } else if (UA[1] == 'crios'){
             UA[1] = 'chrome';
         }
-
         platform = ua.match(/ip(?:ad|od|hone)/) ? 'ios' : (ua.match(/(?:webos|android)/) || ua.match(/mac|win|linux/) || ['other'])[0];
         if (platform == 'win') platform = 'windows';
-
         return {
-            // extend: Function.prototype.extend,
             name: (UA[1] == 'version') ? UA[3] : UA[1],
             version: parseFloat((UA[1] == 'opera' && UA[4]) ? UA[4] : UA[2]),
             platform: platform
         };
     };
 
-    var Browser =  parse(navigator.userAgent, navigator.platform);
 
-    function setCookie(name, value, options) {
-        options = options || {};
-
-        var expires = options.expires;
-
-        if (typeof expires == "number" && expires) {
-            var d = new Date();
-            d.setTime(d.getTime() + expires * 1000);
-            expires = options.expires = d;
-        }
-        if (expires && expires.toUTCString) {
-            options.expires = expires.toUTCString();
-        }
-
-        value = encodeURIComponent(value);
-
-        var updatedCookie = name + "=" + value;
-
-        for (var propName in options) {
-            updatedCookie += "; " + propName;
-            var propValue = options[propName];
-            if (propValue !== true) {
-                updatedCookie += "=" + propValue;
-            }
-        }
-
-        document.cookie = updatedCookie;
+    function setCookie (name, value,  path, domain, secure) {
+        var  expires = new Date(new Date().getTime() + 365 * 24 * 60 * 60 * 1000);
+        return document.cookie = name + "=" + escape(value) +
+            ((expires) ? "; expires=" + expires : "") +
+            ((path) ? "; path=" + path : "") +
+            ((domain) ? "; domain=" + domain : "") +
+            ((secure) ? "; secure" : "");
     }
 
-    setCookie('test',{1:1, 2:2}, 5 );
+
+
+    var guidGenerator = function () {
+        var S4 = function() {
+            return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+        };
+        return (S4()+S4()+S4()+S4()+S4()+S4()+S4()+S4());
+    }
+
+    function getCookie(name) {
+        var cookie = " " + document.cookie;
+        var search = " " + name + "=";
+        var setStr = null;
+        var offset = 0;
+        var end = 0;
+        if (cookie.length > 0) {
+            offset = cookie.indexOf(search);//вернет -1 если имя не найдено
+            if (offset !== -1) {
+                offset += search.length;
+                end = cookie.indexOf(";", offset)
+                if (end == -1) {
+                    end = cookie.length;
+                }
+                setStr = unescape(cookie.substring(offset, end));
+            }
+        }
+        return(setStr);
+    }
+
+    function checkCookie() {
+        if (getCookie('track') !== null) {
+            return getCookie('track')
+        } else {
+            setCookie("track", guidGenerator(), "/");
+        }
+
+    }
+
+    var Browser = {} ;
+    Browser.userAgent = parse(navigator.userAgent);
+    Browser.Cookie = checkCookie();
+
+
+
+    function getXmlHttp(){
+        var xmlhttp;
+        try {
+            xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+        } catch (e) {
+            try {
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            } catch (E) {
+                xmlhttp = false;
+            }
+        }
+        if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
+            xmlhttp = new XMLHttpRequest();
+        }
+        return xmlhttp;
+    }
+
 
     function createQyert(path, method, Browser){
-        var XHR = ("onload" in new XMLHttpRequest()) ? XMLHttpRequest : XDomainRequest;
-        var xhr = new XHR();
+        // var XHR = ("onload" in new XMLHttpRequest()) ? XMLHttpRequest : XDomainRequest;
+        // var xhr = new XHR();
+        var xhr = getXmlHttp();
         xhr.withCredentials = true;
-
-
         xhr.open(path, method, true);
-        xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded; charset=utf-8");
-
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.onreadystatechange=function()
         {
             if (xhr.readyState == 4 && xhr.status == 200)
@@ -83,16 +144,12 @@
                 return;
             }
         }
-
-
         xhr.send('param=' + JSON.stringify(Browser));
-
-
     }
-    createQyert('post', 'test.php', Browser);
-
+    // createQyert('post', 'test.php', Browser);
     // setTimeout(()=>{alert('tic')},7000)
-        // document.body.addEventListener('click',(e)=>{
-        //     alert( e.target.tagName)
-        // })
+    // document.body.addEventListener('click',(e)=>{
+    //     alert( e.target.tagName)
+    // })
+
 </script>
