@@ -1,0 +1,98 @@
+<div id="info"></div>
+<script>
+    var parse = function(ua, platform){
+        ua = ua.toLowerCase();
+        platform = (platform ? platform.toLowerCase() : '');
+
+        // chrome is included in the edge UA, so need to check for edge first,
+        // before checking if it's chrome.
+        var UA = ua.match(/(edge)[\s\/:]([\w\d\.]+)/);
+        if (!UA){
+            UA = ua.match(/(opera|ie|firefox|chrome|trident|crios|version)[\s\/:]([\w\d\.]+)?.*?(safari|(?:rv[\s\/:]|version[\s\/:])([\w\d\.]+)|$)/) || [null, 'unknown', 0];
+        }
+
+        if (UA[1] == 'trident'){
+            UA[1] = 'ie';
+            if (UA[4]) UA[2] = UA[4];
+        } else if (UA[1] == 'crios'){
+            UA[1] = 'chrome';
+        }
+
+        platform = ua.match(/ip(?:ad|od|hone)/) ? 'ios' : (ua.match(/(?:webos|android)/) || ua.match(/mac|win|linux/) || ['other'])[0];
+        if (platform == 'win') platform = 'windows';
+
+        return {
+            // extend: Function.prototype.extend,
+            name: (UA[1] == 'version') ? UA[3] : UA[1],
+            version: parseFloat((UA[1] == 'opera' && UA[4]) ? UA[4] : UA[2]),
+            platform: platform
+        };
+    };
+
+    var Browser =  parse(navigator.userAgent, navigator.platform);
+
+    function setCookie(name, value, options) {
+        options = options || {};
+
+        var expires = options.expires;
+
+        if (typeof expires == "number" && expires) {
+            var d = new Date();
+            d.setTime(d.getTime() + expires * 1000);
+            expires = options.expires = d;
+        }
+        if (expires && expires.toUTCString) {
+            options.expires = expires.toUTCString();
+        }
+
+        value = encodeURIComponent(value);
+
+        var updatedCookie = name + "=" + value;
+
+        for (var propName in options) {
+            updatedCookie += "; " + propName;
+            var propValue = options[propName];
+            if (propValue !== true) {
+                updatedCookie += "=" + propValue;
+            }
+        }
+
+        document.cookie = updatedCookie;
+    }
+
+    setCookie('test',{1:1, 2:2}, 5 );
+
+    function createQyert(path, method, Browser){
+        var XHR = ("onload" in new XMLHttpRequest()) ? XMLHttpRequest : XDomainRequest;
+        var xhr = new XHR();
+        xhr.withCredentials = true;
+
+
+        xhr.open(path, method, true);
+        xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded; charset=utf-8");
+
+        xhr.onreadystatechange=function()
+        {
+            if (xhr.readyState == 4 && xhr.status == 200)
+            {
+                if (xhr.responseText != null) {
+                    document.getElementById('info').innerHTML = xhr.responseText;
+                }
+                else alert('Ощибка Ajax:' + this, xhr.statusText);
+            } else {
+                return;
+            }
+        }
+
+
+        xhr.send('param=' + JSON.stringify(Browser));
+
+
+    }
+    createQyert('post', 'test.php', Browser);
+
+    // setTimeout(()=>{alert('tic')},7000)
+        // document.body.addEventListener('click',(e)=>{
+        //     alert( e.target.tagName)
+        // })
+</script>
