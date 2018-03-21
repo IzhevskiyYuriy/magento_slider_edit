@@ -1,7 +1,5 @@
 <?php
 $baseName = 'ronis_tracker';
-
-
 try {
     $pdo = new PDO(
         'mysql:host=mysql',
@@ -11,11 +9,7 @@ try {
     $sql = "CREATE DATABASE IF NOT EXISTS $baseName";
 
     $pdo->exec($sql);
-
-    echo "DB created successfully";
 }
 catch (PDOException $e) {
-    echo '<pre>';
-    print_r($e);
-    echo "Невозможно установить соединение с базой данных";
+    echo "Can not connect to database";
 }
